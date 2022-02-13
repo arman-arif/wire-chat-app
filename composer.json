@@ -8,10 +8,12 @@
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "laravel-frontend-presets/tall": "^4.0",
         "laravel/framework": "^8.65",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "livewire/livewire": "^2.10"
+        "laravel/ui": "^3.3",
+        "livewire/livewire": "^2.7"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
