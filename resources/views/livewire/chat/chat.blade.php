@@ -1,33 +1,46 @@
 @section('title', 'Chat')
 
-@push('styles:before')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css" rel="stylesheet" />
-@endpush
 @push('styles:after')
-    <link rel="stylesheet" href="{{ asset('css/chat.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{{ asset(mix('css/chat.css')) }}">
 @endpush
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card chat-app">
-                <div id="plist" class="people-list">
-                    <x-chat.search />
-                    <x-chat.contacts />
-                </div>
-                <div class="chat">
-                    <x-chat.topbar />
-                    <x-chat.history>
-                        @forelse ($messages as $messageDate)
-                            <x-chat.message :message-data="$messageDate" />
-                        @empty
-                            <p>No messages yet</p>
-                        @endforelse
-                    </x-chat.history>
-                    <x-chat.form />
-                </div>
-            </div>
+
+
+    <div class="card chat-app dark" style="height: 100vh !important; min-height: 500px">
+        <div id="plist" class="people-list">
+            <x-chat.search />
+            <x-chat.contacts>
+                @foreach ($users as $people)
+                    <x-chat.people :user="$people" :active="$user"/>
+                @endforeach
+            </x-chat.contacts>
+        </div>
+        <div class="chat">
+            <x-chat.topbar />
+            <x-chat.history>
+                @forelse ($messages as $messageDate)
+                    <x-chat.message :message-data="$messageDate" />
+                @empty
+                    <p>No messages yet</p>
+                @endforelse
+                {{ $message }}
+            </x-chat.history>
+            <x-chat.form />
         </div>
     </div>
 </div>
+
+
+
+@push('scripts')
+    {{-- <script src="{{ asset(mix('js/chat.js')) }}"></script> --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const chatHistory = document.getElementById('chatHistory');
+        // chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        $(function() {
+            const $chatHistory = $('#chatHistory');
+            $chatHistory.animate({ scrollTop: chatHistory.scrollHeight }, 500)
+        });
+    </script>
+@endpush

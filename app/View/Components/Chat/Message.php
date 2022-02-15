@@ -20,9 +20,10 @@ class Message extends Component
      */
     public function __construct($messageData)
     {
+        $messageData = json_decode(json_encode($messageData));
         $this->style1 = "";
         $this->style2 = "my-message";
-        if ($messageData->user_id == auth()->user()->id) {
+        if ($messageData->from_id == auth()->user()->id) {
             $this->style1 = "text-end";
             $this->style2 = "other-message float-right";
         }

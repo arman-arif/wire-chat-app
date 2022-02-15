@@ -18,12 +18,12 @@
     @stack('styles:before')
     <!-- Styles -->
     @if(!Route::is('chat'))
-        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
+        <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
     @endif
     @livewireStyles
 
     <!-- Scripts -->
-    <script src="{{ url(mix('js/app.js')) }}" defer></script>
+    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
 
     @stack('styles:after')
 
@@ -35,6 +35,7 @@
     @yield('body')
 
 
+    @stack('scripts:before')
     @livewireScripts
     @stack('scripts')
 </body>
