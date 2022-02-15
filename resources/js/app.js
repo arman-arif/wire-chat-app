@@ -1,3 +1,4 @@
-require('./bootstrap');
+window.jquery = require('jquery');;
+window.axios = require('axios');
 
-require('jquery');
+require('./bootstrap');

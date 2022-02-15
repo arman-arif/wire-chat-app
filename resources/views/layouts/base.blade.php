@@ -15,13 +15,17 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-
+    @stack('styles:before')
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
+    @if(!Route::is('chat'))
+        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
+    @endif
     @livewireStyles
 
     <!-- Scripts -->
     <script src="{{ url(mix('js/app.js')) }}" defer></script>
+
+    @stack('styles:after')
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -30,7 +34,9 @@
 <body>
     @yield('body')
 
+
     @livewireScripts
+    @stack('scripts')
 </body>
 
 </html>

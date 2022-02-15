@@ -15,6 +15,7 @@ require("laravel-mix-tailwind");
 
 mix.js("resources/js/app.js", "public/js/app.js")
     .sass("resources/sass/app.scss", "public/css/app.css")
+    .sass("resources/sass/chat.scss", "public/css/chat.css")
     .tailwind("./tailwind.config.js")
     .sourceMaps();
 

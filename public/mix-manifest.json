@@ -1,4 +1,8 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/js/app.js": "/js/app.js?id=be667d4406c3b2ffad18",
+    "/css/app.css": "/css/app.css?id=17ee0a2f72c3381d4996",
+    "/css/chat.css": "/css/chat.css?id=9e263dfa39aaef87d212",
+    "/js/app.js.map": "/js/app.js.map?id=1843c32d48d566086612",
+    "/css/app.css.map": "/css/app.css.map?id=b02db4250fcf4817d4a2",
+    "/css/chat.css.map": "/css/chat.css.map?id=0338f4955713c6b6841c"
 }
