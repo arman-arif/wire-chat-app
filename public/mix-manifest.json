@@ -1,10 +1,6 @@
 {
-    "/js/app.js": "/js/app.js?id=906a947d3e7fd8ae3eaa",
-    "/css/app.css": "/css/app.css?id=42a236e172cfbf67468a",
-    "/css/chat.css": "/css/chat.css?id=3a2d0a2d03ba949772e3",
-    "/js/app.js.map": "/js/app.js.map?id=de96cbaa03aed55693d4",
-    "/css/app.css.map": "/css/app.css.map?id=64109b01ba62deb98158",
-    "/css/chat.css.map": "/css/chat.css.map?id=bfe99b6c3877f314d11b",
-    "/js/chat.js": "/js/chat.js?id=6d07c94ab8b56179f1cc",
-    "/js/chat.js.map": "/js/chat.js.map?id=a6246b234e0d9fce1177"
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/css/chat.css": "/css/chat.css",
+    "/js/chat.js": "/js/chat.js"
 }

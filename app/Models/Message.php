@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    use UuidAsKey;
+    use UuidAsKey, HasFactory;
 
     public $incrementing = false;
     protected $keyType = 'uuid';

@@ -63,3 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::post('send-message', [ChatController::class, 'sendMessage'])->name('send-message');
     Route::get('chat', [ChatController::class, 'index'])->name('chat');
 });
+
+
+Route::get("test", function () {
+    return ChatController::getContacts();
+});

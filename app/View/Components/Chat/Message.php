@@ -11,6 +11,7 @@ class Message extends Component
     public $style2;
     public $time;
     public $message;
+    public $message_id;
     // public $image;
 
     /**
@@ -30,6 +31,7 @@ class Message extends Component
         // $this->image = $messageData->image_url; //"https://bootdey.com/img/Content/avatar/avatar1.png";
         $this->time = Carbon::parse($messageData->created_at)->format('h:i A, D'); //"10:12 AM, Today";
         $this->message = $messageData->body; //$data['message'];
+        $this->message_id = str_replace('-', '', $messageData->id);
     }
 
     /**

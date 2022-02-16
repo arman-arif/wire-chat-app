@@ -9,13 +9,14 @@ $status_color: #999;
 $light_time_color: #434651;
 $dark_time_color: #434651;
 $light_msg_txt_color: #444444;
-$dark_msg_txt_color: #b4b4b4;
+$dark_msg_txt_color: #fdfdfd;
 $light_other_msg_bg_color: #e8f1f3;
 $light_my_msg_bg_color: #ffffff;
 $dark_my_msg_bg_color: #4d4d4d;
 $dark_other_msg_bg_color: #2b457e;
 $dark_active_bg_color: #353535;
 $light_active_bg_color: #bec0c0;
+$dark_sent_msg_bg_color: #0d6efd;
 
 /****** styles ******/
 
@@ -100,6 +101,10 @@ $light_active_bg_color: #bec0c0;
             }
             .message {
                 color: $dark_msg_txt_color;
+                &.sent {
+                    background: $dark_sent_msg_bg_color;
+                    color: $white_txt_color
+                }
             }
             .my-message {
                 background: $dark_my_msg_bg_color;
@@ -319,7 +324,7 @@ $light_active_bg_color: #bec0c0;
         overflow-x: auto;
     }
     .chat-app .chat-history {
-        height: 600px;
+        // height: 600px;
         overflow-x: auto;
     }
 }
@@ -333,4 +338,10 @@ $light_active_bg_color: #bec0c0;
         height: calc(100vh - 350px);
         overflow-x: auto;
     }
+}
+
+.totally-hidden {
+    visibility: hidden;
+    display: none;
+    opacity: 0;
 }

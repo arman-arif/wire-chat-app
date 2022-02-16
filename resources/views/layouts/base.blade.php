@@ -22,9 +22,6 @@
     @endif
     @livewireStyles
 
-    <!-- Scripts -->
-    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
-
     @stack('styles:after')
 
     <!-- CSRF Token -->
@@ -35,8 +32,10 @@
     @yield('body')
 
 
-    @stack('scripts:before')
+    <!-- Scripts -->
     @livewireScripts
+    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
+    @stack('scripts:before')
     @stack('scripts')
 </body>
 

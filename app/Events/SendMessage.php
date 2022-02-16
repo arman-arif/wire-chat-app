@@ -10,12 +10,12 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMessage
+class SendMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     // properties
-    public $username;
+    public $userId;
     public $message;
 
     /**
@@ -23,9 +23,9 @@ class SendMessage
      *
      * @return void
      */
-    public function __construct($username, $message)
+    public function __construct($userId, $message)
     {
-        $this->username = $username;
+        $this->userId = $userId;
         $this->message = $message;
     }
 
@@ -41,6 +41,6 @@ class SendMessage
 
     public function broadcastAs()
     {
-        return 'message';
+        return 'MessageSent';
     }
 }

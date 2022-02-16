@@ -22,9 +22,10 @@
                 @empty
                     <p>No messages yet</p>
                 @endforelse
-                {{ $message }}
             </x-chat.history>
-            <x-chat.form />
+            <x-chat.form :msgBody="$message" />
+            {{-- :username="$username" :userid="$user_id"/> --}}
+            {{ $user_id }}
         </div>
     </div>
 </div>
@@ -32,15 +33,6 @@
 
 
 @push('scripts')
-    {{-- <script src="{{ asset(mix('js/chat.js')) }}"></script> --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        const chatHistory = document.getElementById('chatHistory');
-        // chatHistory.scrollTop = chatHistory.scrollHeight;
-
-        $(function() {
-            const $chatHistory = $('#chatHistory');
-            $chatHistory.animate({ scrollTop: chatHistory.scrollHeight }, 500)
-        });
-    </script>
+    <script src="{{ asset(mix('js/chat.js')) }}" defer></script>
+    {{-- <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 @endpush

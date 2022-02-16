@@ -40,6 +40,6 @@ class User extends Authenticatable
 
     public function messages()
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Message::class, 'from_id');
     }
 }
