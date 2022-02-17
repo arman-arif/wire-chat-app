@@ -3,19 +3,26 @@
 namespace App\Http\Livewire\Chat;
 
 use App\Events\SendMessage;
-use App\Http\Controllers\ChatController as Repo;
-
+use App\Repo\ChatRepo as Repo;
+use App\Http\Controllers\ChatController as Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Chat extends Component
 {
-    public int|null $user_id = null;
+    public int $authId;
     public string $username = '';
     public string $message = '';
     public array $messages = [];
     public array $users = [];
     public array $user;
     public $attachment = null;
+
+    protected $listeners = [
+        'incomeingMessage' => 'receiveMessage',
+        'userUpdated' => 'fetchMessages',
+    ];
 
     protected $rules = [
         'message' => 'required|min:1',
@@ -24,39 +31,58 @@ class Chat extends Component
 
     public function mount()
     {
-        $this->messages = [
-            (object) ['id' => "fjdkfj34", 'from_id' => 1, 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar1.png', 'body' => 'Hello, how are you?', 'created_at' => '2020-01-01 00:00:00',],
-            (object) ['id' => "fjdkfj3442", 'from_id' => 2, 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar2.png', 'body' => 'Hello, how are you?', 'created_at' => '2020-01-01 00:00:00',],
-            (object) ['id' => "fjdkfj54545", 'from_id' => 2, 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar2.png', 'body' => 'Hello, how are you?', 'created_at' => '2020-01-01 00:00:00',],
-            (object) ['id' => "fjdkfj234234", 'from_id' => 1, 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar1.png', 'body' => 'Hello, how are you?', 'created_at' => '2020-01-01 00:00:00',],
-            (object) ['id' => "fjdkfj9859", 'from_id' => 2, 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar2.png', 'body' => 'Hello, how are you?', 'created_at' => '2020-01-01 00:00:00',],
-            (object) ['id' => "fjdkfj65646", 'from_id' => 1, 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar1.png', 'body' => 'Hello, how are you?', 'created_at' => '2020-01-01 00:00:00',],
-        ];
-
-        $this->users = [
-            (object) ['id' => 1, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar1.png', 'online' => true, 'last_active' => '2022-02-15 07:20:43',],
-            (object) ['id' => 2, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar2.png', 'online' => true, 'last_active' => '2022-02-15 07:20:43',],
-            (object) ['id' => 3, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar3.png', 'online' => false, 'last_active' => '2022-02-15 08:20:43',],
-            (object) ['id' => 4, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar4.png', 'online' => false, 'last_active' => '2022-02-15 08:20:43',],
-            (object) ['id' => 1, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar1.png', 'online' => true, 'last_active' => '2022-02-15 07:20:43',],
-            (object) ['id' => 5, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar2.png', 'online' => true, 'last_active' => '2022-02-15 07:20:43',],
-            (object) ['id' => 3, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar3.png', 'online' => false, 'last_active' => '2022-02-15 08:20:43',],
-            (object) ['id' => 4, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar4.png', 'online' => false, 'last_active' => '2022-02-15 08:20:43',],
-            (object) ['id' => 1, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar1.png', 'online' => true, 'last_active' => '2022-02-15 07:20:43',],
-            (object) ['id' => 5, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar2.png', 'online' => true, 'last_active' => '2022-02-15 07:20:43',],
-            (object) ['id' => 3, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar3.png', 'online' => false, 'last_active' => '2022-02-15 08:20:43',],
-            (object) ['id' => 4, 'name' => 'John Doe', 'image_url' => 'https://bootdey.com/img/Content/avatar/avatar4.png', 'online' => false, 'last_active' => '2022-02-15 08:20:43',],
-        ];
-
-        $this->user = [
-            'id' => 2,
-            'name' => 'John Doe',
-            'username' => 'emon',
-            'image_url' => 'https://bootdey.com/img/Content/avatar/avatar1.png',
-        ];
+        Auth::user()->update([
+            'is_online' => true,
+            'last_active' => now()
+        ]);
+        $this->authId = Auth::user()->id;
+        $this->users = Repo::getContacts();
+        $this->messages = $this->user ? Repo::getMessages($this->user['id']) : [];
     }
 
-    function sendMessage()
+    public function updatedUser()
+    {
+        // $this->fetchMessages();
+    }
+
+    public function receiveMessage($event)
+    {
+        if ($event['message']['from_id'] == $this->user['id'] && $event['message']['to_id'] == $this->authId) {
+            array_push($this->messages, $event['message']);
+            $this->emit('receivedMessage');
+        }
+        if ($event['message']['to_id'] == $this->authId && $event['message']['from_id'] != $this->user['id']) {
+            $sender_name = User::find($event['message']['from_id'])->name;
+
+            $notify = [
+                "title" => "New Message from {$sender_name}",
+                "message" => $event['message']['body'],
+            ];
+            $this->emit('notifyForMessage', $notify);
+        }
+    }
+
+
+    public function selectUser($contact_id)
+    {
+        $this->user = User::find($contact_id)->toArray();
+        $this->emit('userUpdated', route('chat.active', $this->user['id']));
+        $this->fetchMessages();
+        $this->fetchContacts();
+    }
+
+    public function fetchMessages()
+    {
+        $this->messages = Repo::getMessages($this->user['id']);
+        $this->emit('messageLoaded', 0);
+    }
+
+    public function fetchContacts()
+    {
+        $this->users = Repo::getContacts();
+    }
+
+    public function sendMessage()
     {
         $this->validate();
 
@@ -71,10 +97,11 @@ class Chat extends Component
         $message = Repo::saveMessage($data);
 
         if ($message) {
-            event(new SendMessage($message->to_id, $message));
             array_push($this->messages, $message);
-            $this->emit('sendMessage', $message);
             $this->message = '';
+            $this->emit('sendMessage');
+            $this->fetchContacts();
+            event(new SendMessage($message->to_id, $message));
         }
     }
 

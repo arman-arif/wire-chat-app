@@ -29,7 +29,7 @@ class Message extends Component
             $this->style2 = "other-message float-right";
         }
         // $this->image = $messageData->image_url; //"https://bootdey.com/img/Content/avatar/avatar1.png";
-        $this->time = Carbon::parse($messageData->created_at)->format('h:i A, D'); //"10:12 AM, Today";
+        $this->time = Carbon::parse($messageData->created_at)->diffForHumans(); //"10:12 AM, Today";
         $this->message = $messageData->body; //$data['message'];
         $this->message_id = str_replace('-', '', $messageData->id);
     }

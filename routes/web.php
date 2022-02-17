@@ -10,6 +10,7 @@ use App\Http\Livewire\Auth\Passwords\Reset;
 use App\Http\Livewire\Auth\Register;
 use App\Http\Livewire\Auth\Verify;
 use App\Http\Livewire\Chat\Chat;
+use App\Repo\ChatRepo;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,9 +63,14 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('send-message', [ChatController::class, 'sendMessage'])->name('send-message');
     Route::get('chat', [ChatController::class, 'index'])->name('chat');
+    Route::get('chat/{userId}', [ChatController::class, 'activeChat'])->name('chat.active');
 });
 
 
-Route::get("test", function () {
-    return ChatController::getContacts();
+Route::get("contacts", function () {
+    return ChatRepo::getContacts();
+});
+
+Route::get("messages/{contactId}", function ($contactId) {
+    return ChatRepo::getMessages($contactId);
 });

@@ -5,8 +5,8 @@
                 <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
             </a>
             <div class="chat-about">
-                <h6 class="m-b-0">Aiden Chavez</h6>
-                <small>Last seen: 2 hours ago</small>
+                <h6 class="m-b-0">{{ $user['name'] }}</h6>
+                <small>Last seen: {{ $user['last_active'] }}</small>
             </div>
         </div>
     </div>

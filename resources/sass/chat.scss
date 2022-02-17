@@ -1,3 +1,4 @@
+@import "toastr/toastr";
 // color
 $white_bg_color: #fff;
 $white_txt_color: #fff;
@@ -19,6 +20,10 @@ $light_active_bg_color: #bec0c0;
 $dark_sent_msg_bg_color: #0d6efd;
 
 /****** styles ******/
+
+#toast-container>div {
+    box-shadow: 0 0 12px #333333;
+}
 
 //scroll bar
 ::-webkit-scrollbar {

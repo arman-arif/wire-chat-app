@@ -9,7 +9,12 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            <livewire:chat.chat />
+
+            @isset($activeUser)
+                @livewire('chat.chat', ['user' => $activeUser])
+            @else
+                <livewire:chat.chat />
+            @endisset
         </div>
     </div>
 @endsection

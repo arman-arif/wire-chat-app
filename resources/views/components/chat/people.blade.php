@@ -1,4 +1,4 @@
-<li class="clearfix {{ $is_active }}">
+<li class="clearfix {{ $is_active }}" wire:click="selectUser({{ $user_id }})">
     <img src="{{ $image_url  }}" alt="avatar">
     <div class="about">
         <div class="name">{{ $full_name }}</div>

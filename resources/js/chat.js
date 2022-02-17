@@ -1,25 +1,27 @@
 require('jquery');
+const toastr = require('toastr');
+window.toastr = toastr;
 // window.$ = window.jQuery = jQuery;
 
 const chatHistory = document.getElementById('chatHistory');
 chatHistory.scrollTop = chatHistory.scrollHeight;
 
 $(function() {
-    const scrollToLatestMessage = () => {
+    const scrollToLatestMessage = (duration = 500) => {
         const chatHistory = document.getElementById('chatHistory');
         const $chatHistory = $('#chatHistory');
-        $chatHistory.animate({ scrollTop: chatHistory.scrollHeight }, 500);
+        $chatHistory.animate({ scrollTop: chatHistory.scrollHeight }, duration);
     }
 
-    Livewire.on('sendMessage', message => {
-        scrollToLatestMessage();
-    })
+    // document.addEventListener('livewire:load', function() {
+    // });
 
-    window.Echo.channel('chat').listen('.MessageSent', (e) => {
-        // scrollToLatestMessage();
-        var refKey = e.message.id.toString();
-        refKey = refKey.replace(/-/g, '');
-        $(`[data-key="${refKey}"]`).addClass('sent');
-        console.log();
-    });
+    Livewire.on('sendMessage', scrollToLatestMessage);
+    Livewire.on('receivedMessage', scrollToLatestMessage);
+    Livewire.on('messageLoaded', scrollToLatestMessage);
+    Livewire.on('notifyForMessage', (event) => toastr.info(event.message, event.title));
+
+    Livewire.on('userUpdated', (param) => history.pushState(null, null, param));
+
+    window.Echo.channel('chat').listen('.MessageSent', (e) => Livewire.emit('incomeingMessage', e));
 });

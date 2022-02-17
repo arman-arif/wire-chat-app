@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username',
+        'name', 'email', 'password', 'username', 'is_online', 'last_active'
     ];
 
     /**
@@ -41,5 +41,10 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(Message::class, 'from_id');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/user' . $this->image) : asset('assets/avatar.png');
     }
 }

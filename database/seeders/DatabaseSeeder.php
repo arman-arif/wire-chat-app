@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::factory(10)->create();
         User::create([
             'name' => 'Arman',
             'username' => 'arman',
@@ -26,6 +25,11 @@ class DatabaseSeeder extends Seeder
             'username' => 'emon',
             'email' => 'emon@gmail.com',
             'password' => bcrypt('emon'),
+        ]);
+
+        $this->call([
+            UserSeeder::class,
+            MessageSeeder::class,
         ]);
     }
 }
