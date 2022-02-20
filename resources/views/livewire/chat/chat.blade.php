@@ -8,19 +8,25 @@
     <div id="plist" class="people-list">
         <x-chat.search />
         <x-chat.contacts>
-            @foreach ($users as $people)
-                <x-chat.people :user="$people" :active="$user"/>
-            @endforeach
+            @forelse ($users as $people)
+                <x-chat.people :user="$people" :active="$user" :wire:key="$user['id']" />
+            @empty
+                <p>No contact found for chat</p>
+            @endforelse
         </x-chat.contacts>
     </div>
     <div class="chat">
-        <x-chat.topbar :user="$user"/>
+        <x-chat.topbar :user="$user" />
         <x-chat.history>
-            @forelse ($messages as $messageDate)
-                <x-chat.message :message-data="$messageDate" />
-            @empty
-                <p>No messages yet</p>
-            @endforelse
+            @if ($user['id'] != 0)
+                @forelse ($messages as $messageData)
+                    <x-chat.message :message-data="$messageData" :wire:key="$messageData['id']" />
+                @empty
+                    <p class="text-center text-muted mt-5">No messages yet</p>
+                @endforelse
+            @else
+                <p class="text-center text-muted mt-5">Select a contact to start the chat</p>
+            @endif
         </x-chat.history>
         <x-chat.form />
     </div>
@@ -29,7 +35,6 @@
 
 
 @push('scripts')
-    {{-- <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script defer>
         const authId = @js($authId);
     </script>

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -45,6 +46,16 @@ class User extends Authenticatable
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/user' . $this->image) : asset('assets/avatar.png');
+        return $this->image ? asset('storage/' . $this->image) : asset('assets/avatar.png');
+    }
+
+    public function getImageAttribute($value)
+    {
+        return $value ? $value : "avatar.png";
+    }
+
+    public function isOnline()
+    {
+        return Cache::has('user-is-online-' . $this->id);
     }
 }

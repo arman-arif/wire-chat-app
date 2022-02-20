@@ -11,6 +11,7 @@ use App\Http\Livewire\Auth\Register;
 use App\Http\Livewire\Auth\Verify;
 use App\Http\Livewire\Chat\Chat;
 use App\Repo\ChatRepo;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,6 +67,10 @@ Route::middleware('auth')->group(function () {
     Route::get('chat/{userId}', [ChatController::class, 'activeChat'])->name('chat.active');
 });
 
+
+Route::get("test", function () {
+    dd(Cache::has('user-is-online-1'));
+});
 
 Route::get("contacts", function () {
     return ChatRepo::getContacts();

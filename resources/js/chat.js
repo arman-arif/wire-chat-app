@@ -24,4 +24,6 @@ $(function() {
     Livewire.on('userUpdated', (param) => history.pushState(null, null, param));
 
     window.Echo.channel('chat').listen('.MessageSent', (e) => Livewire.emit('incomeingMessage', e));
+    window.Echo.channel('chat').listen('.UserLoggedOut', (e) => Livewire.emit('userLoggedOut', e));
+    window.Echo.channel('chat').listen('.UserLoggedIn', (e) => Livewire.emit('userLoggedIn', e));
 });

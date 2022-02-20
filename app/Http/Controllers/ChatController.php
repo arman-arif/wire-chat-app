@@ -16,8 +16,8 @@ class ChatController extends Controller
 
     public function activeChat($userId)
     {
-        $activeUser = User::find($userId)->toArray();
-        return view('chat', ['activeUser' => $activeUser]);
+        // $activeUser = User::find($userId)->toArray();
+        return view('chat', ['activeId' => $userId]);
     }
 
     public function sendMessage($user_id, $message)

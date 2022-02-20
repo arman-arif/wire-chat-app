@@ -6,19 +6,19 @@
 @endpush
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
 
-            @isset($activeUser)
-                @livewire('chat.chat', ['user' => $activeUser])
-            @else
-                <livewire:chat.chat />
-            @endisset
+                @isset($activeId)
+                    <livewire:chat.chat :activeId="$activeId" />
+                @else
+                    <livewire:chat.chat :activeId=0 />
+                @endisset
+            </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
-@push('scripts:before')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-@endpush
+    @push('scripts:before')
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    @endpush

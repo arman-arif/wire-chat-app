@@ -10,18 +10,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMessage implements ShouldBroadcast
+class UserLoggedOut implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    // properties
     public $userId;
-    public $message;
+    public $lastSeen;
 
-    public function __construct($userId, $message)
+    public function __construct($userId, $lastSeen)
     {
         $this->userId = $userId;
-        $this->message = $message;
+        $this->lastSeen = $lastSeen;
     }
 
     public function broadcastOn()
@@ -31,6 +30,6 @@ class SendMessage implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'MessageSent';
+        return 'UserLoggedOut';
     }
 }
