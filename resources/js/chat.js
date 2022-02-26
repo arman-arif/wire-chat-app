@@ -16,7 +16,7 @@ $(function() {
     // document.addEventListener('livewire:load', function() {
     // });
 
-    Livewire.on('sendMessage', scrollToLatestMessage);
+    Livewire.on('sentMessage', scrollToLatestMessage);
     Livewire.on('receivedMessage', scrollToLatestMessage);
     Livewire.on('messageLoaded', scrollToLatestMessage);
     Livewire.on('notifyForMessage', (event) => toastr.info(event.message, event.title));

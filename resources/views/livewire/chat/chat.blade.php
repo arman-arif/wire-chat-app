@@ -28,7 +28,7 @@
                 <p class="text-center text-muted mt-5">Select a contact to start the chat</p>
             @endif
         </x-chat.history>
-        <x-chat.form />
+        <livewire:chat.composer :message="$message" />
     </div>
 </div>
 

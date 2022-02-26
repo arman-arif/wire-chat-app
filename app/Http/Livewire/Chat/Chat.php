@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use App\Events\SendMessage;
 use App\Repo\ChatRepo as Repo;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class Chat extends Component
@@ -13,17 +14,19 @@ class Chat extends Component
     public int $authId;
     public int $activeId;
     public string $username = '';
-    public string $message = '';
-    public array $messages = [];
-    public array $users = [];
-    public array $user;
-    public $attachment = null;
+    public string $message  = '';
+    public $attachment      = null;
+
+    public Collection $users;
+    public User $user;
+    public array $messages;
 
     protected $listeners = [
         'incomeingMessage' => 'receiveMessage',
-        'userUpdated' => 'fetchMessages',
-        'userLoggedOut' => 'updateUserStatus',
-        'userLoggedIn' => 'updateUserStatus',
+        'userUpdated'      => 'fetchMessages',
+        'userLoggedOut'    => 'updateUserStatus',
+        'userLoggedIn'     => 'updateUserStatus',
+        'send'             => 'sendMessage',
     ];
 
     protected $rules = [
@@ -33,11 +36,11 @@ class Chat extends Component
 
     public function mount()
     {
-        $activeUser = User::find($this->activeId);
-        $this->authId = Auth::user()->id;
-        $this->users = Repo::getContacts();
-        $this->user = $activeUser ? $activeUser->toArray() : ['id' => 0, 'name' => '', 'image' => 'avatar.png', 'is_online' => false, 'last_active' => ''];
-        $this->messages = isset($this->user['id']) ? Repo::getMessages($this->user['id']) : [];
+        $activeUser     = User::find($this->activeId);
+        $this->authId   = Auth::user()->id;
+        $this->users    = Repo::getContacts();
+        $this->user     = $activeUser ? $activeUser : null;
+        $this->messages = isset($this->user->id) ? Repo::getMessages($this->user->id) : [];
         Auth::user()->update(['is_online' => true, 'last_active' => now()]);
     }
 
@@ -71,7 +74,7 @@ class Chat extends Component
 
     public function selectUser($contact_id)
     {
-        $this->user = User::find($contact_id)->toArray();
+        $this->user = User::find($contact_id);
         $this->emit('userUpdated', route('chat.active', $this->user['id']));
     }
 
@@ -86,8 +89,9 @@ class Chat extends Component
         $this->users = Repo::getContacts();
     }
 
-    public function sendMessage()
+    public function sendMessage($data)
     {
+        $this->message = $data['message'];
         $this->validate();
 
         $attachment = null;
@@ -98,12 +102,14 @@ class Chat extends Component
             'attachment' => $attachment,
         ];
 
+        // $this->emitTo('chat.composer', 'sent');
+
         $message = Repo::saveMessage($data);
 
         if ($message) {
             array_push($this->messages, $message);
             $this->message = '';
-            $this->emit('sendMessage');
+            $this->emit('sentMessage');
             $this->fetchContacts();
             event(new SendMessage($message->to_id, $message));
         }
@@ -112,7 +118,7 @@ class Chat extends Component
     function updateUserStatus($event)
     {
         $this->users = Repo::getContacts();
-        $this->user = User::find($this->user['id'])->toArray();
+        $this->user = User::find($this->user['id']);
     }
 
     public function render()

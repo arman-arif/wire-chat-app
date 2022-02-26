@@ -552,9 +552,9 @@ eval("// removed by extract-text-webpack-plugin//# sourceURL=[module]\n//# sourc
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Arman\codes\laravel\wire-chat-app\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Users\Arman\codes\laravel\wire-chat-app\resources\sass\app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! C:\Users\Arman\codes\laravel\wire-chat-app\resources\sass\chat.scss */"./resources/sass/chat.scss");
+__webpack_require__(/*! C:\Users\Arman\codes\personal\wire-chat-app\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Users\Arman\codes\personal\wire-chat-app\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! C:\Users\Arman\codes\personal\wire-chat-app\resources\sass\chat.scss */"./resources/sass/chat.scss");
 
 
 /***/ })

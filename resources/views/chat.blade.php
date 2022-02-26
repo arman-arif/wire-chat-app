@@ -9,7 +9,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-
                 @isset($activeId)
                     <livewire:chat.chat :activeId="$activeId" />
                 @else

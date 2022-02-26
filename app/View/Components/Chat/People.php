@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Chat;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\View\Component;
 
@@ -19,16 +20,15 @@ class People extends Component
      *
      * @return void
      */
-    public function __construct($user, $active)
+    public function __construct(User $user, $active)
     {
-        $user = json_decode(json_encode($user));
-        $this->user_id  = $user->id;
+        $this->user_id  = $user->id ?? 0;
         $this->is_online = $user->is_online ? 'online' : "offline";
-        $this->is_active = ($active['id'] == $user->id) ? 'active' : '';
-        $this->last_active = Carbon::parse($user->last_active)->diffForHumans();
-        $this->active_status = $user->is_online ? 'Online' : $this->last_active;
-        $this->image_url  = $user->image_url;
-        $this->full_name  = $user->name;
+        $this->is_active = ($active['id'] == $this->user_id) ? 'active' : '';
+        $this->last_active = Carbon::parse($user->last_active ?? 0)->diffForHumans();
+        $this->active_status = ($user->is_online ?? false) ? 'Online' : $this->last_active;
+        $this->image_url  = $user->image_url ?? asset('assets/avatar.png');
+        $this->full_name  = $user->name ?? '';
     }
 
     /**

@@ -58,7 +58,6 @@ class ChatRepo
                 $user->online = false;
                 return $user;
             })
-            ->makeHidden(['email_verified_at', 'image', 'updated_at'])
-            ->toArray();
+            ->makeHidden(['email_verified_at', 'image', 'updated_at']);
     }
 }
