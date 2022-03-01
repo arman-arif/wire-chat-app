@@ -39,4 +39,16 @@
         const authId = @js($authId);
     </script>
     <script src="{{ asset(mix('js/chat.js')) }}" defer></script>
+    <script>
+        $(function() {
+            const chatHistory = document.getElementById('chatHistory');
+            const $chatHistory = $('#chatHistory');
+            $chatHistory.on('scroll', function(e) {
+                if (intval(chatHistory.scrollTop) + 80 > chatHistory.scrollHeight) {
+                    // Livewire.emit('loadMoreMessages');
+                    
+                }
+            })
+        });
+    </script>
 @endpush

@@ -27,6 +27,7 @@ class Chat extends Component
         'userLoggedOut'    => 'updateUserStatus',
         'userLoggedIn'     => 'updateUserStatus',
         'send'             => 'sendMessage',
+        'loadMoreMessages' => 'loadMoreMessages',
     ];
 
     protected $rules = [
@@ -34,12 +35,13 @@ class Chat extends Component
         'attachment' => 'nullable|mimes:jpeg,bmp,png,jpg,gif,svg|max:2048',
     ];
 
-    public function mount()
+    public function mount($activeId)
     {
+        $this->activeId = $activeId;
         $activeUser     = User::find($this->activeId);
         $this->authId   = Auth::user()->id;
         $this->users    = Repo::getContacts();
-        $this->user     = $activeUser ? $activeUser : null;
+        $this->user     = $activeUser ? $activeUser : Auth::user();
         $this->messages = isset($this->user->id) ? Repo::getMessages($this->user->id) : [];
         Auth::user()->update(['is_online' => true, 'last_active' => now()]);
     }
@@ -56,11 +58,11 @@ class Chat extends Component
 
     public function receiveMessage($event)
     {
-        if ($event['message']['from_id'] == $this->user['id'] && $event['message']['to_id'] == $this->authId) {
+        if ($event['message']['from_id'] == $this->user->id && $event['message']['to_id'] == $this->authId) {
             array_push($this->messages, $event['message']);
             $this->emit('receivedMessage');
         }
-        if ($event['message']['to_id'] == $this->authId && $event['message']['from_id'] != $this->user['id']) {
+        if ($event['message']['to_id'] == $this->authId && $event['message']['from_id'] != $this->user->id) {
             $sender_name = User::find($event['message']['from_id'])->name;
 
             $notify = [
@@ -71,16 +73,23 @@ class Chat extends Component
         }
     }
 
+    public function loadMoreMessages()
+    {
+        $msg_ids = array_column($this->messages, 'id');
+        dd($msg_ids);
+        $moreMessages = Repo::getMessages($this->user->id, $msg_ids);
+    }
+
 
     public function selectUser($contact_id)
     {
         $this->user = User::find($contact_id);
-        $this->emit('userUpdated', route('chat.active', $this->user['id']));
+        $this->emit('userUpdated', route('chat.active', $this->user->id));
     }
 
     public function fetchMessages()
     {
-        $this->messages = Repo::getMessages($this->user['id']);
+        $this->messages = Repo::getMessages($this->user->id);
         $this->emit('messageLoaded', 0);
     }
 
@@ -97,7 +106,7 @@ class Chat extends Component
         $attachment = null;
 
         $data = [
-            'to_id' => $this->user['id'],
+            'to_id' => $this->user->id,
             'body' => $this->message,
             'attachment' => $attachment,
         ];
@@ -118,7 +127,7 @@ class Chat extends Component
     function updateUserStatus($event)
     {
         $this->users = Repo::getContacts();
-        $this->user = User::find($this->user['id']);
+        $this->user = User::find($this->user->id);
     }
 
     public function render()

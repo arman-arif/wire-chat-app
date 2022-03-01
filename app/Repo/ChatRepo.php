@@ -24,7 +24,7 @@ class ChatRepo
 
     public static function getMessages($contact_id)
     {
-        return Message::where(function ($query) use ($contact_id) {
+        $messages = Message::where(function ($query) use ($contact_id) {
             $query->where('from_id', Auth::user()->id)->where('to_id', $contact_id);
         })
             ->orWhere(function ($query) use ($contact_id) {
@@ -35,8 +35,38 @@ class ChatRepo
             ->limit(30)
             ->get()
             // ->makeHidden(['updated_at'])
+            // ->map(function ($message) {
+            //     $message->time = strtotime($message->created_at);
+            //     return $message;
+            // })
             ->sortByDesc('created_at')
             ->toArray();
+
+        return array_reverse($messages);
+    }
+
+    public function getMoreMessages($contact_id, $msg_ids)
+    {
+        $messages = Message::where(function ($query) use ($contact_id) {
+            $query->where('from_id', Auth::user()->id)->where('to_id', $contact_id);
+        })
+            ->orWhere(function ($query) use ($contact_id) {
+                $query->where('from_id', $contact_id)->where('to_id', Auth::user()->id);
+            })
+            // ->where('created_at', '>=', Carbon::now()->subMinutes(10)->format('Y-m-d H:i:s'))
+            ->whereNotIn('id', $msg_ids)
+            ->orderByDesc('created_at')
+            ->limit(30)
+            ->get()
+            // ->makeHidden(['updated_at'])
+            // ->map(function ($message) {
+            //     $message->time = strtotime($message->created_at);
+            //     return $message;
+            // })
+            ->sortByDesc('created_at')
+            ->toArray();
+
+        return array_reverse($messages);
     }
 
     public static function getContacts()

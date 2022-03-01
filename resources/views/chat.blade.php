@@ -12,7 +12,7 @@
                 @isset($activeId)
                     <livewire:chat.chat :activeId="$activeId" />
                 @else
-                    <livewire:chat.chat :activeId=0 />
+                    <livewire:chat.chat :activeId="0" />
                 @endisset
             </div>
         </div>

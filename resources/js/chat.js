@@ -10,7 +10,9 @@ $(function() {
     const scrollToLatestMessage = (duration = 500) => {
         const chatHistory = document.getElementById('chatHistory');
         const $chatHistory = $('#chatHistory');
-        $chatHistory.animate({ scrollTop: chatHistory.scrollHeight }, duration);
+        $chatHistory.animate({
+            scrollTop: chatHistory.scrollHeight
+        }, duration);
     }
 
     // document.addEventListener('livewire:load', function() {
